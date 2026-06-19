@@ -1,0 +1,13 @@
+.{
+    .name = .zglfw,
+    .version = "0.2.0",
+    .fingerprint = 0x6fbada33572eb090,
+    .minimum_zig_version = "0.16.0",
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+        "LICENSE",
+        "README.md"
+    },
+}
