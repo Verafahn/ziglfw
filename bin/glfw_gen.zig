@@ -2,8 +2,16 @@ const std = @import("std");
 const glfw = @import("glfw3.c");
 pub fn main(init: std.process.Init) !void {
     const io = init.io;
+    const allocator = init.arena.allocator();
+    const args = try init.minimal.args.toSlice(allocator);
+
+    if (args.len != 2) {
+        std.log.err("Args error.", .{});
+    }
+
+    const output_file_path = args[1];
     
-    var file = try std.Io.Dir.cwd().createFile(io, "src/glfw.zig", .{});
+    var file = try std.Io.Dir.cwd().createFile(io, output_file_path, .{});
     defer file.close(io);
 
     var buffer: [64]u8 = undefined;
@@ -12,7 +20,7 @@ pub fn main(init: std.process.Init) !void {
     try writer.interface.writeAll(
         \\//! This file generate by bin/glfw_gen.zig
         \\
-        \\const glfw = @import("glfw3.zig");
+        \\const glfw = @import("glfw3.c");
         \\
         \\pub const Error = error{
         \\    NoCurrentContext,

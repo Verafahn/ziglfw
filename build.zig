@@ -23,10 +23,8 @@ pub fn build(b: *std.Build) !void {
         .root_module = mod,
     });
 
-    // Run rename program.
-    const run_gen = b.addRunArtifact(gen);
-    const step = b.step("gen", "Generator GLFW Warpper");
-    step.dependOn(&run_gen.step);
+    const gen_step = b.addRunArtifact(gen);
+    const output = gen_step.addOutputFileArg("glfw.zig");
 
     // Export module 'zglfw'.
     const zglfw = b.addModule("zglfw", .{
@@ -34,7 +32,18 @@ pub fn build(b: *std.Build) !void {
         .target = target,
         .optimize = optimize,
         .imports = &.{
-            .{ .name = "glfw3.c", .module = glfw3.createModule() },
+            // .{ .name = "glfw.c", .module = glfw3.createModule() },
+            .{
+                .name = "glfw.zig",
+                .module = b.createModule(.{
+                    .root_source_file = output,
+                    .target = target,
+                    .optimize = optimize,
+                    .imports = &.{
+                        .{ .name = "glfw3.c", .module = glfw3.createModule() },
+                    },
+                }),
+            },
         },
     });
     _ = zglfw;
