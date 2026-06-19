@@ -1,16 +1,15 @@
 const std = @import("std");
-const glfw = @cImport({
-    @cDefine("GLFW_INCLUDE_NONE", {});
-    @cInclude("GLFW/glfw3.h");
-});
+const glfw = @import("glfw3.c");
+pub fn main(init: std.process.Init) !void {
+    const io = init.io;
+    
+    var file = try std.Io.Dir.cwd().createFile(io, "src/glfw.zig", .{});
+    defer file.close(io);
 
-pub fn main() !void {
-    const allocator = std.heap.smp_allocator;
+    var buffer: [64]u8 = undefined;
+    var writer = file.writer(io, &buffer);
 
-    var file = try std.fs.cwd().createFile("src/glfw.zig", .{});
-    defer file.close();
-
-    _ = try file.write(
+    try writer.interface.writeAll(
         \\//! This file generate by bin/glfw_gen.zig
         \\
         \\const glfw = @import("glfw3.zig");
@@ -91,8 +90,7 @@ pub fn main() !void {
     for (decls) |decl| {
         if (std.mem.startsWith(u8, decl.name, "glfw") and decl.name.len > 4) {
             const subname = decl.name[4..];
-            const line = try std.fmt.allocPrint(
-                allocator,
+            try writer.interface.print(
                 "pub const {c}{s}: *const @TypeOf(glfw.{s}) = &glfw.{s};\n",
                 .{
                     std.ascii.toLower(subname[0]),
@@ -101,18 +99,17 @@ pub fn main() !void {
                     decl.name,
                 },
             );
-            _ = try file.write(line);
         } else if (std.mem.startsWith(u8, decl.name, "GLFW_") and decl.name.len > 5) {
             const subname = decl.name[5..];
-            const line = try std.fmt.allocPrint(
-                allocator,
+            try writer.interface.print(
                 "pub const {s} = @as(c_int, glfw.{s});\n",
                 .{
                     subname,
                     decl.name,
                 },
             );
-            _ = try file.write(line);
         }
     }
+
+    try writer.interface.flush();
 }

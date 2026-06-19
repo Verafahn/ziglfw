@@ -1,6 +1,6 @@
 //! This file generate by bin/glfw_gen.zig
 
-const glfw = @import("glfw3.zig");
+const glfw = @import("glfw3.c");
 
 pub const Error = error{
     NoCurrentContext,
@@ -8,7 +8,6 @@ pub const Error = error{
     OutOfMemory,
     ApiUnavailable,
     VersionUnavailable,
-    PlatformError,
     FormatUnavailable,
     NoWindowContext,
     CursorUnavailable,
@@ -27,7 +26,7 @@ pub fn check() Error!void {
         OUT_OF_MEMORY => return error.OutOfMemory,
         API_UNAVAILABLE => return error.ApiUnavailable,
         VERSION_UNAVAILABLE => return error.VersionUnavailable,
-        PLATFORM_ERROR => return error.PlatformError,
+        PLATFORM_ERROR => @panic("Platform-specific error"),
         FORMAT_UNAVAILABLE => return error.FormatUnavailable,
         NO_WINDOW_CONTEXT => return error.NoWindowContext,
         CURSOR_UNAVAILABLE => return error.CursorUnavailable,
@@ -194,8 +193,6 @@ pub const vulkanSupported: *const @TypeOf(glfw.glfwVulkanSupported) = &glfw.glfw
 pub const getRequiredInstanceExtensions: *const @TypeOf(glfw.glfwGetRequiredInstanceExtensions) = &glfw.glfwGetRequiredInstanceExtensions;
 pub const INCLUDE_NONE = @as(c_int, glfw.GLFW_INCLUDE_NONE);
 pub const APIENTRY_DEFINED = @as(c_int, glfw.GLFW_APIENTRY_DEFINED);
-pub const WINGDIAPI_DEFINED = @as(c_int, glfw.GLFW_WINGDIAPI_DEFINED);
-pub const CALLBACK_DEFINED = @as(c_int, glfw.GLFW_CALLBACK_DEFINED);
 pub const VERSION_MAJOR = @as(c_int, glfw.GLFW_VERSION_MAJOR);
 pub const VERSION_MINOR = @as(c_int, glfw.GLFW_VERSION_MINOR);
 pub const VERSION_REVISION = @as(c_int, glfw.GLFW_VERSION_REVISION);
