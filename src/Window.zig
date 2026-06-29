@@ -352,27 +352,27 @@ pub fn create(width: u32, height: u32, title: []const u8, hint: Hint) WindowErro
     return .{ .impl = impl.? };
 }
 
-pub fn destroy(self: *Window) void {
+pub fn destroy(self: Window) void {
     glfw.destroyWindow(self.impl);
 }
 
-pub fn swapBuffer(self: *Window) void {
+pub fn swapBuffer(self: Window) void {
     glfw.swapBuffers(self.impl);
 }
 
-pub fn makeContextCurrent(self: *Window) void {
+pub fn makeContextCurrent(self: Window) void {
     glfw.makeContextCurrent(self.impl);
 }
 
-pub fn shouldClose(self: *const Window) bool {
+pub fn shouldClose(self: Window) bool {
     return glfw.windowShouldClose(self.impl) == glfw.TRUE;
 }
 
-pub fn setShouldClose(self: *Window, value: bool) void {
+pub fn setShouldClose(self: Window, value: bool) void {
     glfw.setWindowShouldClose(self.impl, b(value));
 }
 
-pub fn getTitle(self: *const Window) []const u8 {
+pub fn getTitle(self: Window) []const u8 {
     const title = glfw.getWindowTitle(self.impl);
     if (title == null) {
         @branchHint(.cold);
@@ -382,41 +382,41 @@ pub fn getTitle(self: *const Window) []const u8 {
     return title[0..std.mem.len(title)];
 }
 
-pub fn setTitle(self: *Window, title: []const u8) void {
+pub fn setTitle(self: Window, title: []const u8) void {
     glfw.setWindowTitle(self.impl, @ptrCast(title));
 }
 
-pub fn iconify(self: *Window) void {
+pub fn iconify(self: Window) void {
     glfw.iconifyWindow(self.impl);
 }
 
-pub fn restore(self: *Window) void {
+pub fn restore(self: Window) void {
     glfw.restoreWindow(self.impl);
 }
 
-pub fn maximize(self: *Window) void {
+pub fn maximize(self: Window) void {
     glfw.maximizeWindow(self.impl);
 }
 
-pub fn show(self: *Window) void {
+pub fn show(self: Window) void {
     glfw.showWindow(self.impl);
 }
 
-pub fn hide(self: *Window) void {
+pub fn hide(self: Window) void {
     glfw.hideWindow(self.impl);
 }
 
-pub fn focus(self: *Window) void {
+pub fn focus(self: Window) void {
     glfw.focusWindow(self.impl);
 }
 
-pub fn requestAttention(self: *Window) void {
+pub fn requestAttention(self: Window) void {
     glfw.requestWindowAttention(self.impl);
 }
 
 const Pos = types.Pos;
 
-pub fn getPos(self: *const Window) error{FeatureUnavailable}!Pos {
+pub fn getPos(self: Window) error{FeatureUnavailable}!Pos {
     var x: c_int = undefined;
     var y: c_int = undefined;
     glfw.getWindowPos(self.impl, &x, &y);
@@ -431,13 +431,13 @@ pub fn getPos(self: *const Window) error{FeatureUnavailable}!Pos {
     return .{ .x = @intCast(x), .y = @intCast(y) };
 }
 
-pub fn setPos(self: *Window, x: i32, y: i32) void {
+pub fn setPos(self: Window, x: i32, y: i32) void {
     glfw.setWindowPos(self.impl, @intCast(x), @intCast(y));
 }
 
 const Size = types.Size;
 
-pub fn getSize(self: *const Window) Size {
+pub fn getSize(self: Window) Size {
     var width: c_int = undefined;
     var height: c_int = undefined;
     glfw.getWindowSize(self.impl, &width, &height);
@@ -451,11 +451,11 @@ pub fn getSize(self: *const Window) Size {
     };
 }
 
-pub fn setSize(self: *Window, width: u32, height: u32) void {
+pub fn setSize(self: Window, width: u32, height: u32) void {
     glfw.setWindowSize(self.impl, @intCast(width), @intCast(height));
 }
 
-pub fn setSizeLimits(self: *Window, min_width: ?u32, min_height: ?u32, max_width: ?u32, max_height: ?u32) void {
+pub fn setSizeLimits(self: Window, min_width: ?u32, min_height: ?u32, max_width: ?u32, max_height: ?u32) void {
     glfw.setWindowSizeLimits(
         self.impl,
         min_width orelse glfw.DONT_CARE,
@@ -465,7 +465,7 @@ pub fn setSizeLimits(self: *Window, min_width: ?u32, min_height: ?u32, max_width
     );
 }
 
-pub fn setAspectRatio(self: *Window, numer: ?u32, denom: ?u32) void {
+pub fn setAspectRatio(self: Window, numer: ?u32, denom: ?u32) void {
     glfw.setWindowAspectRatio(
         self.impl,
         numer orelse glfw.DONT_CARE,
@@ -473,7 +473,7 @@ pub fn setAspectRatio(self: *Window, numer: ?u32, denom: ?u32) void {
     );
 }
 
-pub fn getFrameBufferSize(self: *const Window) Size {
+pub fn getFrameBufferSize(self: Window) Size {
     var width: c_int = undefined;
     var height: c_int = undefined;
     glfw.getFramebufferSize(self.impl, &width, &height);
@@ -487,7 +487,7 @@ pub fn getFrameBufferSize(self: *const Window) Size {
     };
 }
 
-pub fn getFrameSize(self: *const Window) Rectangle {
+pub fn getFrameSize(self: Window) Rectangle {
     var left: c_int = undefined;
     var top: c_int = undefined;
     var right: c_int = undefined;
@@ -505,15 +505,15 @@ pub fn getFrameSize(self: *const Window) Rectangle {
     };
 }
 
-pub fn getOpacity(self: *const Window) f32 {
+pub fn getOpacity(self: Window) f32 {
     return glfw.getWindowOpacity(self.impl);
 }
 
-pub fn setOpacity(self: *Window, opacity: f32) void {
+pub fn setOpacity(self: Window, opacity: f32) void {
     glfw.setWindowOpacity(self.impl, opacity);
 }
 
-pub fn getMonitor(self: *const Window) ?Monitor {
+pub fn getMonitor(self: Window) ?Monitor {
     const monitor = glfw.getWindowMonitor(self.impl);
     if (monitor == null) {
         @branchHint(.cold);
@@ -523,7 +523,7 @@ pub fn getMonitor(self: *const Window) ?Monitor {
     return .{ .impl = monitor.? };
 }
 
-pub fn setMonitor(self: *Window, monitor: ?Monitor, x: i32, y: i32, width: u32, height: u32, fps: ?u32) void {
+pub fn setMonitor(self: Window, monitor: ?Monitor, x: i32, y: i32, width: u32, height: u32, fps: ?u32) void {
     glfw.setWindowMonitor(
         self.impl,
         if (monitor) |m| m.impl else null,
@@ -618,7 +618,7 @@ inline fn attr(attrib: Attrib) c_int {
     };
 }
 
-pub fn getAttrib(self: *const Window, attrib: Attrib) AttribData {
+pub fn getAttrib(self: Window, attrib: Attrib) AttribData {
     const data = glfw.getWindowAttrib(self.impl, attr(attrib));
     switch (data) {
         glfw.FOCUSED => |d| return .{ .focused = d == glfw.TRUE },
@@ -674,7 +674,7 @@ pub const SetAttrib = union(SetAttribType) {
     mouse_passthrough: bool,
 };
 
-pub fn setAttrib(self: *Window, attrib: SetAttrib) void {
+pub fn setAttrib(self: Window, attrib: SetAttrib) void {
     switch (attrib) {
         inline else => |a| {
             glfw.setWindowAttrib(self.impl, @intFromEnum(attrib), a);
@@ -682,7 +682,7 @@ pub fn setAttrib(self: *Window, attrib: SetAttrib) void {
     }
 }
 
-pub fn setIcon(self: *Window, allocator: Allocator, images: []Image) error{
+pub fn setIcon(self: Window, allocator: Allocator, images: []Image) error{
     InvalidValue,
     FeatureUnavailable,
 }!void {
@@ -704,7 +704,7 @@ pub fn setIcon(self: *Window, allocator: Allocator, images: []Image) error{
     glfw.setWindowIcon(self.impl, glfw_images.len, @ptrCast(glfw_images));
 }
 
-pub fn getInputMode(self: *const Window, mode: ModeType) Mode {
+pub fn getInputMode(self: Window, mode: ModeType) Mode {
     const glfw_mode = glfw.getInputMode(self.impl, @intFromEnum(mode));
     switch (glfw_mode) {
         .cursor => return @enumFromInt(glfw_mode),
@@ -712,7 +712,7 @@ pub fn getInputMode(self: *const Window, mode: ModeType) Mode {
     }
 }
 
-pub fn setInputMode(self: *Window, mode: Mode) void {
+pub fn setInputMode(self: Window, mode: Mode) void {
     const value = switch (mode) {
         .cursor => |m| @intFromEnum(m),
         inline else => |a| if (a) glfw.TRUE else glfw.FALSE,
@@ -720,17 +720,17 @@ pub fn setInputMode(self: *Window, mode: Mode) void {
     glfw.setInputMode(self.impl, @intFromEnum(mode), value);
 }
 
-pub fn getKey(self: *const Window, key: Key) State {
+pub fn getKey(self: Window, key: Key) State {
     return @enumFromInt(glfw.getKey(self.impl, @intFromEnum(key)));
 }
 
-pub fn getMouseButton(self: *const Window, button: Button) State {
+pub fn getMouseButton(self: Window, button: Button) State {
     return @enumFromInt(glfw.getMouseButton(self.impl, @intFromEnum(button)));
 }
 
 const fPos = types.f64Pos;
 
-pub fn getCursorPos(self: *const Window) error{}!fPos {
+pub fn getCursorPos(self: Window) error{}!fPos {
     var x: f64 = undefined;
     var y: f64 = undefined;
     glfw.getCursorPos(self.impl, &x, &y);
@@ -743,11 +743,11 @@ pub fn getCursorPos(self: *const Window) error{}!fPos {
     return .{ .x = x, .y = y };
 }
 
-pub fn setCursorPos(self: *Window, x: f32, y: f32) void {
+pub fn setCursorPos(self: Window, x: f32, y: f32) void {
     glfw.setCursorPos(self.impl, x, y);
 }
 
-pub fn setCursor(self: *Window, cursor: ?Cursor) void {
+pub fn setCursor(self: Window, cursor: ?Cursor) void {
     glfw.setCursor(self.impl, if (cursor) |c| c.impl else null);
 }
 
