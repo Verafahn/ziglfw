@@ -1,49 +1,6 @@
 # vfglfw
 
-A Zig-idiomatic wrapper around the GLFW library that provides a significantly more ergonomic API than raw C header bindings.
-
-## About
-
-`vfglfw` exposes all **120 default GLFW APIs** out-of-the-box—without requiring any feature macros. It enables you to substitute GLFW's internal memory allocator with your own custom implementation and streamlines window event handling through an intuitive, type-safe interface.
-
-## Key Features
-
-- **Full API Coverage**: Wraps all 120 standard GLFW functions (excluding feature-macro guarded ones) with zero runtime overhead.
-- **Custom Allocator Support**: Seamlessly replace GLFW's default memory allocator with your Zig allocator (e.g., `gpa`) for unified memory management.
-- **Ergonomic Event Handling**: Handle window events via a clean, switch-based dispatch pattern instead of cumbersome C function pointers.
-- **Batteries-Not-Included GLFW**: Decouples the GLFW implementation, giving you total freedom to choose your preferred binary or source distribution.
-
-## Installation
-
-Add `vfglfw` to your `build.zig.zon` dependencies:
-
-```bash
-zig fetch git+https://github.com/Verafahn/vfglfw --save
-```
-
-Then, register the module in your `build.zig` file:
-
-```zig
-const vfglfw = b.dependency("vfglfw", .{
-    .target = target,
-    .optimize = optimize,
-});
-
-// Add this to your executable or library's imports:
-    .imports = &.{
-        .{ .name = "vfglfw", .module = vfglfw.module("vfglfw") },
-    },
-```
-
-Now you can import and use it just like the standard library:
-
-```zig
-const glfw = @import("vfglfw");
-```
-
-## Quick Start
-
-The following example demonstrates how to set up a window, override the default allocator, and handle cursor movement events:
+vfglfw is a Zig-style wrapper for the GLFW library. It offers a more convenient API compared to directly using the C headers. This library wraps all 120 default GLFW APIs (without enabling feature macros), allows you to replace GLFW's memory allocator with your own implementation, and provides an easier way to handle window events.
 
 ```zig
 const std = @import("std");
@@ -70,7 +27,6 @@ pub fn main(init: std.process.Init) !void {
 
     var window = try glfw.Window.create(1600, 900, "Demo", .{});
     defer window.destroy();
-
     // Set `Handle` instance and the types of events to be handled.
     window.setHandle(.{
         .vptr = undefined,
@@ -88,11 +44,38 @@ pub fn main(init: std.process.Init) !void {
 }
 ```
 
-## GLFW Dependency Notes
+## Usage
 
-> **Note:** `vfglfw` does **not** bundle any GLFW implementation by default.  
-> You are free to link it against any source-built GLFW, official pre-compiled binaries, or even alternative Zig-friendly distributions like [glfw.zig](https://github.com/tiawl/glfw.zig). Ensure the GLFW library is available in your system or project linker path.
+Add `vfglfw` to your `build.zig.zon`:
+
+```
+zig fetch git+https://github.com/Verafahn/vfglfw --save
+```
+
+Then add the following to your `build.zig`:
+
+```zig
+const vfglfw = b.dependency("vfglfw", .{
+    .target = target,
+    .optimize = optimize,
+});
+...
+    .imports = &.{
+        .{ .name = "vfglfw", .module = vfglfw.module("vfglfw") },
+    },
+...
+```
+
+Now you can import it like the standard library:
+
+```zig
+const glfw = @import("vfglfw");
+```
+
+## Notes
+
+vfglfw does not bundle any GLFW implementation. You are free to choose how to provide GLFW – whether by building from source, using official pre‑compiled binaries, or integrating a library like [glfw.zig](https://github.com/tiawl/glfw.zig).
 
 ## License
 
-This repository is distributed under the **MIT License**. See the `LICENSE` file for more details.
+This repository is licensed under the MIT License.
