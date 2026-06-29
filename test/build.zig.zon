@@ -9,6 +9,10 @@
             .url = "git+https://github.com/ziglibs/zgl.git?ref=master#a73479a8036ebf806759f8dd7e6d60abc631da1d",
             .hash = "zgl-1.1.0-p_NpAD9FCgAY_XDO_EXxSGJ5-n9b3deO0V-9z9HJKYTQ",
         },
+        .glfw_zig = .{
+            .url = "git+https://github.com/tiawl/glfw.zig.git#560890c772f9168d1ee78678c55fe9dbeb1cdd41",
+            .hash = "glfw_zig-1.0.0-NrvYo4nRGQCZby7yNo_dBtsmGzVEhMsV4-Fw29gWQq6L",
+        },
     },
     .fingerprint = 0x8c73652109023132,
     .minimum_zig_version = "0.16.0",

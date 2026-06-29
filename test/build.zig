@@ -12,6 +12,10 @@ pub fn build(b: *std.Build) !void {
         .target = target,
         .optimize = optimize,
     });
+    const glfw = b.dependency("glfw_zig", .{
+        .target = target,
+        .optimize = optimize,
+    });
 
     const mod = b.createModule(.{
         .root_source_file = b.path("src/main.zig"),
@@ -23,8 +27,8 @@ pub fn build(b: *std.Build) !void {
             .{ .name = "zgl", .module = zgl.module("zgl") },
         },
     });
-    mod.addLibraryPath(b.path("lib/"));
-    mod.linkSystemLibrary("glfw3", .{});
+
+    mod.linkLibrary(glfw.artifact("glfw"));
 
     const exe = b.addExecutable(.{
         .name = "demo",
@@ -32,7 +36,6 @@ pub fn build(b: *std.Build) !void {
     });
 
     b.installArtifact(exe);
-    b.installBinFile("lib/glfw3.dll", "glfw3.dll");
 
     const run_step = b.step("run", "Run demo.");
     const run = b.addRunArtifact(exe);
