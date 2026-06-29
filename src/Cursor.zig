@@ -4,7 +4,7 @@ const Cursor = @This();
 
 impl: *glfw.Cursor,
 
-pub fn create(image: *const Image, xhot: i32, yhot: i32) error{InvalidValue}!Cursor {
+pub fn create(image: Image, xhot: i32, yhot: i32) error{InvalidValue}!Cursor {
     const img = glfw.Image{
         .width = @intCast(image.width),
         .height = @intCast(image.height),
