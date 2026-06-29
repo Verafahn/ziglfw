@@ -23,7 +23,7 @@ pub fn build(b: *std.Build) !void {
         .optimize = optimize,
         .link_libc = true,
         .imports = &.{
-            .{ .name = "ziglfw", .module = vfglfw.module("vfglfw") },
+            .{ .name = "vfglfw", .module = vfglfw.module("vfglfw") },
             .{ .name = "zgl", .module = zgl.module("zgl") },
         },
     });

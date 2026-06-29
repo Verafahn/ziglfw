@@ -12,7 +12,7 @@ pub const Handle = struct {
     vtable: VTable = .{},
 
     pub const VTable = struct {
-        callback: ?*const fn (?*anyopaque, event: Event) void,
+        callback: ?*const fn (?*anyopaque, event: Event) void = null,
     };
 };
 
